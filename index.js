@@ -5,36 +5,14 @@ const bodyParser = require('body-parser');
 
 const hostname = 'localhost';
 const port = 3000;
+const gameRouter = require('./routes/game-router');
 
 const app = express();
 app.use(morgan('dev'));
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 
-app.all('/games', (request, response, next) => {
-  response.statusCode = 200;
-  response.setHeader('Content-Type', 'text/html');
-  next();
-});
-
-//Games
-
-app.get('/games', (request, response, next) => {
-  response.end('<html><body><h1>Games</h1></body></html>');
-});
-
-app.post('/games', (request, response, next) => {
-  response.end(`Will add: ${request.body.name}. Details: ${request.body.description}`);
-});
-
-app.put('/games', (request, response, next) => {
-  response.statusCode = 403;
-  response.end(`Put operation not supported on /games`);
-});
-
-app.delete('/games', (request, response, next) => {
-  response.end(`Delete all games.`);
-});
+app.use('/games', gameRouter);
 
 //GameId
 
