@@ -5,38 +5,19 @@ const bodyParser = require('body-parser');
 
 const hostname = 'localhost';
 const port = 3000;
-const gameRouter = require('./routes/game-router');
+
+const dishRouter = require('./routes/dish-router');
+const promoRouter = require('./routes/promo-router');
+const leaderRouter = require('./routes/leader-router');
 
 const app = express();
 app.use(morgan('dev'));
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 
-app.use('/games', gameRouter);
-
-//GameId
-
-app.get('/games/:gameId', (request, response, next) => {
-  response.end(`<html><body><h1>Consulting dish ID ${request.params.gameId}</h1></body></html>`);
-});
-
-app.post('/games/:gameId', (request, response, next) => {
-  response.statusCode = 403;
-  response.end(`Post operation not supported on /games/${request.params.gameId}`);
-});
-
-app.put('/games/:gameId', (request, response, next) => {
-  response.write(`Updating game with id ${request.params.gameId}\n`);
-  response.end(`Will update game ${request.body.name}. Details: ${request.body.description}`);
-});
-
-app.delete('/games/:gameId', (request, response, next) => {
-  response.end(`Deleting game ${request.params.gameId}.`);
-});
-
-
-
-
+app.use('/dishes', dishRouter);
+app.use('/promotions', promoRouter);
+app.use('/leaders', leaderRouter);
 
 app.use((request, response, next) => {
   response.code = 200;
